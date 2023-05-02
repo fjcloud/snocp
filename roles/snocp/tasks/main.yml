@@ -1,0 +1,7 @@
+- include_tasks: "tasks/01_create_ocm_cluster.yml"
+  when: snocp_tf_state == "present"
+
+- include_tasks: "tasks/02_{{ snocp_provider }}.yml"
+
+- include_tasks: "tasks/03_prepare_host.yml"
+  when: snocp_tf_state == "present"

@@ -1,0 +1,39 @@
+- name: Add snocp VM to host
+  add_host:
+    name: snocp
+    ansible_host: "{{ tf_output.outputs.snocp_ip.value }}"
+    ansible_connection: ssh
+    ansible_user: root
+    ansible_ssh_private_key_file: "{{ snocp_ssh_priv_path }}"
+    become: true
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+  changed_when: false
+
+- name: Wait for SSH
+  wait_for:
+    port: 22
+    host: "{{ tf_output.outputs.snocp_ip.value }}"
+    timeout: 1200
+
+- name: Config for reinstall
+  block:
+    - template:
+        src: "99_assisted_install.j2"
+        dest: "/etc/grub.d/99_assisted_install"
+        mode: "u=rwx"
+
+    - shell: "grub2-mkconfig -o /boot/grub2/grub.cfg"
+
+    - shell: "grub2-reboot 3"
+
+    - get_url:
+        url: "{{ initrd_url }}"
+        dest: "/boot/snocp_initrd.img"
+
+    - get_url:
+        url: "https://mirror.openshift.com/pub/openshift-v4/{{ snocp_cluster_arch }}/dependencies/rhcos/latest/rhcos-live-kernel-aarch64"
+        dest: "/boot/snocp_kernel.img"
+
+    - shell: "shutdown -r" 
+
+  delegate_to: snocp

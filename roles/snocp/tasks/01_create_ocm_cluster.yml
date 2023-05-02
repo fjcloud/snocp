@@ -1,0 +1,73 @@
+---
+
+- name: Get oAuth Token
+  uri:
+    url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    method: POST
+    body_format: form-urlencoded
+    body:
+      grant_type: refresh_token
+      client_id: cloud-services
+      refresh_token: "{{ snocp_offline_token }}"
+  register: sso_response
+
+- name: Get Pull Secret
+  uri:
+    url: https://api.openshift.com/api/accounts_mgmt/v1/access_token
+    method: POST
+    headers:
+      Authorization: "Bearer {{ sso_response.json.access_token }}"
+  register: pull_secret
+
+- name: Create Cluster
+  uri:
+    url: https://api.openshift.com/api/assisted-install/v2/clusters
+    method: POST
+    headers:
+      Authorization: "Bearer {{ sso_response.json.access_token }}"
+    body_format: json
+    body:
+      name: "{{ snocp_cluster_name }}"
+      base_dns_domain: "{{ snocp_cluster_domain }}"
+      cpu_architecture: "{{ snocp_cluster_arch }}"
+      openshift_version: "{{ snocp_cluster_version }}"
+      high_availability_mode: None
+      disk_encryption:
+        enable_on: "none"
+        mode: "tpmv2"
+      pull_secret: "{{ pull_secret.json | to_json(separators=(',',':')) }}"
+    status_code:
+      - 200
+      - 201
+  register: cluster
+
+- name: Create env vars
+  uri:
+    url: https://api.openshift.com/api/assisted-install/v2/infra-envs
+    method: POST
+    headers:
+      Authorization: "Bearer {{ sso_response.json.access_token }}"
+    body_format: json
+    body:
+      name: "{{ snocp_cluster_name }}_infra-env"
+      openshift_version: "{{ snocp_cluster_version }}"
+      pull_secret: "{{ pull_secret.json | to_json(separators=(',',':')) }}"
+      cpu_architecture:  "{{ snocp_cluster_arch }}"
+      cluster_id: "{{ cluster.json.id }}"
+    status_code:
+      - 200
+      - 201
+  register: env_vars
+
+- name: Get PXE script link
+  uri:
+    url: "https://api.openshift.com/api/assisted-install/v2/infra-envs/{{ env_vars.json.id }}/downloads/files-presigned?file_name=ipxe-script"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ sso_response.json.access_token }}"
+  register: pxe_url
+
+- set_fact:
+    initrd_url: "{{ lookup('ansible.builtin.url', pxe_url.json.url ) | regex_search(qry) }}"
+  vars:
+    qry: http:\/\/api\.openshift\.com\/api\/assisted-images\/images\/[0-9a-fA-F\-]+\/pxe-initrd\?arch=arm64&image_token=[^,\s]*

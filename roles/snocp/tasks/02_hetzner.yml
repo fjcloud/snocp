@@ -1,0 +1,9 @@
+- name: Deploy on Hetzner
+  community.general.terraform:
+    project_path: "terraform/hetzner"
+    force_init: true
+    variables:
+      ssh_public_key: "{{ snocp_ssh_pub }}"
+      hcloud_token: "{{ snocp_hcloud_token }}"
+    state: "{{ snocp_tf_state }}"
+  register: tf_output
