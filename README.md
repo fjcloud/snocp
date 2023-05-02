@@ -11,6 +11,23 @@ This Ansible role will permits you to deploy with assisted installer SNO.
 $ ansible-galaxy install -r requirements.yml
 ```
 
+## General env
+
+Create auth.yml file :
+
+```
+---
+
+snocp_offline_token: "xxxxxxxxxxxxxxxxxx"
+
+snocp_ssh_pub: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+snocp_ssh_priv_path: "~/.ssh/id_rsa"
+
+snocp_hcloud_token: "{{ lookup('env','HCLOUD_TOKEN') }}"
+
+```
+
 ## Deployment on Hetzner
 
 Export HCLOUD_TOKEN
@@ -23,4 +40,4 @@ Deploy SNO
 
 ```shell
 $ ansible-playbook deploy_snocp.yml
-``
+```
