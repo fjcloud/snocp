@@ -1,4 +1,4 @@
-# Assisted deployment of Single Node OpenShift with terraform
+# Assisted deployment of Single Node OpenShift
 
 This Ansible role will permits you to deploy with assisted installer SNO.
 
