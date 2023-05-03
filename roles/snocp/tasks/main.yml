@@ -7,4 +7,4 @@
   when: snocp_tf_state == "present"
 
 - debug: 
-    msg: "You can find info or finish install of your cluster here https://console.redhat.com/openshift/assisted-installer/clusters/{{ cluster.json.id }}"
+    msg: "You can find info or finish install of your cluster here https://console.redhat.com/openshift/assisted-installer/clusters/{{ cluster.json.id | default }}"
