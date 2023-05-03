@@ -1,6 +1,6 @@
 # Assisted deployment of Single Node OpenShift
 
-This Ansible role will permits you to deploy with https://cloud.redhat.com assisted installer a SNO.
+This Ansible role will permits you to deploy with https://cloud.redhat.com a SNO.
 
 ## Requirements
 
