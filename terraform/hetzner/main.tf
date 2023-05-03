@@ -36,12 +36,12 @@ variable "hcloud_server_datacenter" {
 # Infrastructure config
 ##
 
-resource "random_id" "server" {
+resource "random_id" "snocp" {
   byte_length = 4
 }
 
 resource "hcloud_ssh_key" "key" {
-  name = var.ssh_public_key_name
+  name = "${var.ssh_public_key_name}-${random_id.snocp.dec}"
   public_key = var.ssh_public_key
 }
 
@@ -50,7 +50,7 @@ provider "hcloud" {
 }
 
 resource "hcloud_server" "snocp" {
-  name = "snocp-${random_id.server.result}"
+  name = "snocp-${random_id.snocp.dec}"
   labels = { "os" = "coreos" }
   server_type = var.hcloud_server_type
   datacenter = var.hcloud_server_datacenter
