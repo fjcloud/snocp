@@ -6,4 +6,5 @@
 - include_tasks: "tasks/03_prepare_host.yml"
   when: snocp_tf_state == "present"
 
-- msg: "You can find info or finish install of your cluster here https://console.redhat.com/openshift/assisted-installer/clusters/{{ cluster.json.id }}"
+- debug: 
+    msg: "You can find info or finish install of your cluster here https://console.redhat.com/openshift/assisted-installer/clusters/{{ cluster.json.id }}"
