@@ -32,24 +32,13 @@ variable "hcloud_server_datacenter" {
   default = "fsn1-dc14"
 }
 
-variable "hcloud_server_name" {
-  description = "Name of the server"
-  type = string
-  default = "snocp"
-}
-
-####
-# Outputs
-##
-
-output "snocp_ip" {
-  value = hcloud_server.snocp.ipv4_address
-}
-
-
 ####
 # Infrastructure config
 ##
+
+resource "random_id" "server" {
+  byte_length = 4
+}
 
 resource "hcloud_ssh_key" "key" {
   name = var.ssh_public_key_name
@@ -61,15 +50,23 @@ provider "hcloud" {
 }
 
 resource "hcloud_server" "snocp" {
-  name = var.hcloud_server_name
+  name = "snocp-${random_id.server.result}"
   labels = { "os" = "coreos" }
-
   server_type = var.hcloud_server_type
   datacenter = var.hcloud_server_datacenter
 
-#  image = "centos-stream-9"
+# image = "centos-stream-9"
 # ARM
-   image = "103907339"
+  image = "103907339"
   ssh_keys = [hcloud_ssh_key.key.id]
 
 }
+
+####
+# Outputs
+##
+
+output "snocp_ip" {
+  value = hcloud_server.snocp.ipv4_address
+}
+
