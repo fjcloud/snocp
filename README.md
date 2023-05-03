@@ -30,6 +30,8 @@ snocp_hcloud_token: "{{ lookup('env','HCLOUD_TOKEN') }}"
 
 Export HCLOUD_TOKEN
 
+> Generate a token https://docs.hetzner.com/cloud/api/getting-started/generating-api-token/
+
 ```shell
 $ export HCLOUD_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxx
 ```
