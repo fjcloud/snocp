@@ -1,6 +1,6 @@
 # Assisted deployment of Single Node OpenShift
 
-This Ansible role will permits you to deploy with assisted installer SNO.
+This Ansible role will permits you to deploy with https://cloud.redhat.com assisted installer a SNO.
 
 ## Requirements
 
@@ -11,9 +11,11 @@ This Ansible role will permits you to deploy with assisted installer SNO.
 $ ansible-galaxy install -r requirements.yml
 ```
 
-## General env
+## Authentication
 
 Create auth.yml file :
+
+> Get offline token on https://console.redhat.com/openshift/token
 
 ```
 ---
@@ -40,4 +42,12 @@ Deploy SNO
 
 ```shell
 $ ansible-playbook deploy_snocp.yml
+```
+
+Finish install on OCM URL
+
+## Remove SNO
+
+```shell
+$ ansible-playbook deploy_snocp.yml -e snocp_tf_state=absent
 ```
