@@ -12,7 +12,7 @@
       vars:
         snocp_provider: hetzner
         snocp_tf_state: present
-        snocp_cluster_name: "hz"
-        snocp_cluster_domain: "msl.cloud"
+        snocp_cluster_name: "sno"
+        snocp_cluster_domain: "example.com"
         snocp_cluster_version: "4.12"
         snocp_cluster_arch: "arm64"
