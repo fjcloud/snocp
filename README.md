@@ -7,10 +7,6 @@ This Ansible role will permits you to deploy with https://cloud.redhat.com assis
 - Ansible >= 2.10
 - Terraform >= 1.2.6
 
-```shell
-$ ansible-galaxy install -r requirements.yml
-```
-
 ## Authentication
 
 Create auth.yml file :
@@ -44,7 +40,7 @@ Deploy SNO
 $ ansible-playbook deploy_snocp.yml
 ```
 
-Finish install on OCM URL
+Finish install on OCM URL given in ouput of Ansible Playbook
 
 ## Remove SNO
 
