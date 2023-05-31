@@ -32,7 +32,7 @@
         dest: "/boot/snocp_initrd.img"
 
     - get_url:
-        url: "https://mirror.openshift.com/pub/openshift-v4/{{ snocp_cluster_arch }}/dependencies/rhcos/latest/rhcos-live-kernel-aarch64"
+        url: "https://mirror.openshift.com/pub/openshift-v4/{{ snocp_cluster_arch }}/dependencies/rhcos/{{ snocp_cluster_version }}/latest/rhcos-live-kernel-aarch64"
         dest: "/boot/snocp_kernel.img"
 
     - shell: "shutdown -r" 

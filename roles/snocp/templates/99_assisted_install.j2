@@ -11,7 +11,7 @@
 
 cat <<EOF
 menuentry "Red Hat - Assisted Install" {
-    linux ${SUBVOL}/snocp_kernel.img initrd=initrd coreos.live.rootfs_url="https://mirror.openshift.com/pub/openshift-v4/{{ snocp_cluster_arch }}/dependencies/rhcos/{{ snocp_cluster_version }}/rhcos-live-rootfs.{{ j2_local_arch }}.img" random.trust_cpu=on rd.luks.options=discard ignition.firstboot ignition.platform.id=metal console=tty1 console=ttyS1,115200n8 coreos.inst.persistent-kargs="console=tty1 console=ttyS1,115200n8"
+    linux ${SUBVOL}/snocp_kernel.img initrd=initrd coreos.live.rootfs_url="https://mirror.openshift.com/pub/openshift-v4/{{ snocp_cluster_arch }}/dependencies/rhcos/{{ snocp_cluster_version }}/latest/rhcos-live-rootfs.{{ j2_local_arch }}.img" random.trust_cpu=on rd.luks.options=discard ignition.firstboot ignition.platform.id=metal console=tty1 console=ttyS1,115200n8 coreos.inst.persistent-kargs="console=tty1 console=ttyS1,115200n8"
     initrd ${SUBVOL}/snocp_initrd.img
 }
 EOF
